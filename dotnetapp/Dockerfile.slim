@@ -1,0 +1,15 @@
+# Stage 1: Build layer
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
+WORKDIR /src
+COPY . .
+RUN dotnet publish "WebApi.csproj" -o /output
+
+# Stage 2: Runtime layer
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
+WORKDIR /app
+COPY --from=build /output .
+
+ENV ASPNETCORE_URLS http://+:80
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "/app/WebApi.dll"]

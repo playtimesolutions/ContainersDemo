@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnetapp
+  template:
+    metadata:
+      labels:
+        app: dotnetapp
+    spec:
+      containers:
+        - name: dotnetapp
+          image: containersdemo.azurecr.io/dotnetapp:slim
+          ports:
+            - containerPort: 80
+          env:
+            - name: AppVersion
+              value: 1.0.0.0
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+
+              
